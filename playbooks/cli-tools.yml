@@ -1,0 +1,77 @@
+---
+- name: Install my favorite CLI tools
+  hosts: "*"
+
+  become: true
+  tasks:
+  - name: Install 'midnight Commander'
+    community.general.pacman:
+      update_cache: true
+      name: mc
+      state: present
+
+  - name: Install 'tmux'
+    community.general.pacman:
+      update_cache: true
+      name: tmux
+      state: present
+
+  - name: Install 'htop'
+    community.general.pacman:
+      update_cache: true
+      name: htop
+      state: present
+
+  - name: Install 'bmon'
+    community.general.pacman:
+      update_cache: true
+      name: bmon
+      state: present
+
+  - name: Install 'git'
+    community.general.pacman:
+      update_cache: true
+      name: git
+      state: present
+
+  - name: Install 'zsh'
+    community.general.pacman:
+      update_cache: true
+      name: zsh
+      state: present
+
+  - name: Install 'neovim'
+    community.general.pacman:
+      update_cache: true
+      name: neovim
+      state: present
+
+  - name: Install 'exa' replacement for 'ls'
+    community.general.pacman:
+      update_cache: true
+      name: exa
+      state: present
+
+  - name: Install 'neofetch' because I'm using Arch
+    community.general.pacman:
+      update_cache: true
+      name: neofetch
+      state: present
+
+  - name: Install 'pkgfile'
+    community.general.pacman:
+      update_cache: true
+      name: pkgfile
+      state: present
+
+  - name: Install 'mlocate'
+    community.general.pacman:
+      update_cache: true
+      name: mlocate
+      state: present
+
+  - name: Install 'flatpak'
+    community.general.pacman:
+      update_cache: true
+      name: flatpak
+      state: present

@@ -1,0 +1,21 @@
+---
+- name: Add user to install packages from AUR using AUR helpers
+  hosts: "*"
+
+  tasks:
+  - name: Create the `aura` user
+    become: true
+    ansible.builtin.user:
+      system: true
+      name: aura
+      create_home: true
+      group: wheel
+
+  - name: Allow the 'aura' user to run 'sudo pacman' without a password
+    become: true
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers.d/11-install-aura
+      mode: 0440
+      line: 'aura ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+      create: true
+      validate: 'visudo -cf %s'
