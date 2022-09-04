@@ -3,24 +3,25 @@
   hosts: "*"
 
   tasks:
+    - name: Update list of packages
+      community.general.pacman:
+        update_cache: true
+
     - name: Install 'ansible'
       become: true
       community.general.pacman:
-        update_cache: true
         name: ansible
         state: present
 
     - name: Install 'ansible-lint'
       become: true
       community.general.pacman:
-        update_cache: true
         name: ansible-lint
         state: present
 
     - name: Install 'python-packaging'
       become: true
       community.general.pacman:
-        update_cache: true
         name: python-packaging
         state: present
 
