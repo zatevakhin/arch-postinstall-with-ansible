@@ -26,6 +26,6 @@
         state: present
 
     - name: Ansible install 'kewlfft.aur'
-      ansible.builtin.shell:
+      ansible.builtin.command:
         cmd: ansible-galaxy collection install kewlfft.aur
-
+      changed_when: false
