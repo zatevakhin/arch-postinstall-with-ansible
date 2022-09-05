@@ -8,6 +8,18 @@
     community.general.pacman:
       update_cache: true
 
+  - name: Remove 'nano'
+    community.general.pacman:
+      name: nano
+      state: absent
+
+  - name: Remove 'vim'
+    community.general.pacman:
+      name:
+        - vim
+        - vim-runtime
+      state: absent
+
   - name: Install 'midnight Commander'
     community.general.pacman:
       name: mc
@@ -16,6 +28,16 @@
   - name: Install 'tmux'
     community.general.pacman:
       name: tmux
+      state: present
+
+  - name: Install 'curl'
+    community.general.pacman:
+      name: curl
+      state: present
+
+  - name: Install 'wget'
+    community.general.pacman:
+      name: wget
       state: present
 
   - name: Install 'htop'
