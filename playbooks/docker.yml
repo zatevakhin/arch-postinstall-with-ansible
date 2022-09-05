@@ -1,0 +1,36 @@
+---
+- name: Install Docker and my favorite tools for Docker
+  hosts: "*"
+
+  become: true
+  tasks:
+    - name: Update list of packages
+      community.general.pacman:
+        update_cache: true
+      become: true
+
+    - name: Install 'docker'
+      community.general.pacman:
+        name: docker
+        state: present
+
+    - name: Install 'docker-compose'
+      community.general.pacman:
+        name: docker-compose
+        state: present
+
+    - name: Install 'aur/doko'
+      kewlfft.aur.aur:
+        name: aur/doko
+        use: trizen
+        state: present
+      become: true
+      become_user: aura
+
+    - name: Install 'aur/python-rocker'
+      kewlfft.aur.aur:
+        name: aur/python-rocker
+        use: trizen
+        state: present
+      become: true
+      become_user: aura
