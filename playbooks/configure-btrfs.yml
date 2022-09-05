@@ -1,0 +1,147 @@
+---
+- name: Configure BTRFS
+  hosts: "*"
+  vars:
+    luks_volume: /dev/mapper/luksdev
+
+  tasks:
+    - name: Get stat of '{{ luks_volume }}'
+      ansible.builtin.stat:
+        path: '{{ luks_volume }}'
+      register: luksdev
+      become: true
+
+    - name: Get the UUID of '{{ luks_volume }}'
+      ansible.builtin.shell:
+        # boom if no uuid of volume
+        cmd: blkid | grep "{{ luks_volume }}" | awk -F '"' '{ print $2 }' | egrep '^[0-9a-f-]{36}$'
+      register: luks_volume_uuid
+      changed_when: false
+      become: true
+
+    - name: Mount '{{ luks_volume }}' for work with BTRFS subvolumes
+      ansible.posix.mount:
+        path: /mnt
+        src: '{{ luks_volume }}'
+        state: mounted
+        fstype: btrfs
+      become: true
+
+    - name: Umount '/.snapshots' and clean '/etc/fstab'
+      ansible.posix.mount:
+        path: /.snapshots
+        state: absent
+        fstype: btrfs
+      become: true
+
+    - name: Get stat of subvolume '/mnt/@.snapshots'
+      ansible.builtin.stat:
+        path: /mnt/@.snapshots
+      register: snapshots
+      become: true
+
+    - name: Remove subvolume '/mnt/@.snapshots'
+      ansible.builtin.command:
+        cmd: btrfs subvolume delete /mnt/@.snapshots
+        removes: /mnt/@.snapshots
+      when: snapshots.stat.exists
+      become: true
+
+    - name: Create '@workspace' subvolume
+      ansible.builtin.command:
+        cmd: btrfs subvolume create /mnt/@workspace
+        creates: /mnt/@workspace
+      become: true
+
+    - name: Get ID of '@workspace' subvolume
+      ansible.builtin.shell:
+        cmd: btrfs subvolume show /mnt/@workspace | grep "Subvolume ID:" | awk '{ print $3 }' | egrep '^[0-9]+$'
+      become: true
+      changed_when: false
+      register: workspace
+
+    - name: Add '@workspace' subvolume into '/etc/fstab'
+      ansible.posix.mount:
+        path: /workspace
+        src: UUID={{ luks_volume_uuid.stdout }}
+        fstype: btrfs
+        state: mounted
+        opts: rw,relatime,ssd,space_cache=v2,subvolid={{ workspace.stdout }},subvol=/@workspace
+      become: true
+      when: luks_volume_uuid.rc == 0 and workspace.rc == 0
+
+    - name: Create '@steam' subvolume
+      ansible.builtin.command:
+        cmd: btrfs subvolume create /mnt/@steam
+        creates: /mnt/@steam
+      become: true
+
+    - name: Get ID of '@steam' subvolume
+      ansible.builtin.shell:
+        cmd: btrfs subvolume show /mnt/@steam | grep "Subvolume ID:" | awk '{ print $3 }' | egrep '^[0-9]+$'
+      become: true
+      changed_when: false
+      register: steam
+
+    - name: Add '@steam' subvolume into '/etc/fstab'
+      ansible.posix.mount:
+        path: /steam
+        src: UUID={{ luks_volume_uuid.stdout }}
+        fstype: btrfs
+        state: mounted
+        opts: rw,relatime,ssd,space_cache=v2,subvolid={{ steam.stdout }},subvol=/@steam
+      become: true
+      when: luks_volume_uuid.rc == 0 and steam.rc == 0
+
+    - name: Create '@libvirt' subvolume
+      ansible.builtin.command:
+        cmd: btrfs subvolume create /mnt/@libvirt
+        creates: /mnt/@libvirt
+      become: true
+
+    - name: Get ID of '@libvirt' subvolume
+      ansible.builtin.shell:
+        cmd: btrfs subvolume show /mnt/@libvirt | grep "Subvolume ID:" | awk '{ print $3 }' | egrep '^[0-9]+$'
+      become: true
+      changed_when: false
+      register: libvirt
+
+    - name: Add '@libvirt' subvolume into '/etc/fstab'
+      ansible.posix.mount:
+        path: /var/lib/libvirt
+        src: UUID={{ luks_volume_uuid.stdout }}
+        fstype: btrfs
+        state: mounted
+        opts: rw,relatime,ssd,space_cache=v2,subvolid={{ libvirt.stdout }},subvol=/@libvirt
+      become: true
+      when: luks_volume_uuid.rc == 0 and libvirt.rc == 0
+
+    - name: Create '@docker' subvolume
+      ansible.builtin.command:
+        cmd: btrfs subvolume create /mnt/@docker
+        creates: /mnt/@docker
+      become: true
+
+    - name: Get ID of '@docker' subvolume
+      ansible.builtin.shell:
+        cmd: btrfs subvolume show /mnt/@docker | grep "Subvolume ID:" | awk '{ print $3 }' | egrep '^[0-9]+$'
+      become: true
+      changed_when: false
+      register: docker
+
+    - name: Add '@docker' subvolume into '/etc/fstab'
+      ansible.posix.mount:
+        path: /var/lib/docker
+        src: UUID={{ luks_volume_uuid.stdout }}
+        fstype: btrfs
+        state: mounted
+        opts: rw,relatime,ssd,space_cache=v2,subvolid={{ docker.stdout }},subvol=/@docker
+      become: true
+      when: luks_volume_uuid.rc == 0 and docker.rc == 0
+
+    - name: Umount '{{ luks_volume }}' drive
+      ansible.posix.mount:
+        path: /mnt
+        state: absent
+        fstype: btrfs
+      become: true
