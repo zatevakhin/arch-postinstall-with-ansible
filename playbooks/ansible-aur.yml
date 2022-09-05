@@ -1,5 +1,5 @@
 ---
-- name: Add user to install packages from AUR using AUR helpers
+- name: Install AUR helpers and user to work with them through Ansible
   hosts: "*"
 
   tasks:
@@ -19,3 +19,11 @@
       line: 'aura ALL=(ALL) NOPASSWD: /usr/bin/pacman'
       create: true
       validate: 'visudo -cf %s'
+
+  - name: Install 'trizen'
+    kewlfft.aur.aur:
+      name: trizen
+      use: makepkg
+      state: present
+    become: true
+    become_user: aura
