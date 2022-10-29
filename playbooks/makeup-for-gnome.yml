@@ -102,6 +102,12 @@
       state: present
     become: true
 
+  - name: Install 'ffmpeg-thumbnailer'
+    community.general.pacman:
+      name: extra/ffmpegthumbnailer
+      state: present
+    become: true
+
   #############################################################
   # Install configuration tools for KDE apps
   #############################################################
