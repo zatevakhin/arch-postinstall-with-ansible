@@ -4,9 +4,14 @@ Using Ansible to make post-install configuration of Arch Linux because I can
 ## Pre-requirements
 
 ```bash
-pacman -S community/ansible community/sshpass
+sudo pacman -S core/openssh community/ansible community/sshpass
+sudo systemctl enable --now sshd
 ```
 
+```bash
+mkdir -p ~/.ssh/
+ssh-keyscan 127.0.0.1 >> ~/.ssh/known_hosts
+```
 
 ## How to use?
 
