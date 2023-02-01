@@ -21,5 +21,5 @@ ansible-playbook playbooks/<playbook.yml>  -u <USER> -i inventory/hosts --ask-pa
 
 Recommended installation order:
 - `ansible.yml`
-- `add-aura-user.yml`
+- `ansible-aur.yml`
 - `other playbooks`
