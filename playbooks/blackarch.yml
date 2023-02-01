@@ -1,0 +1,15 @@
+---
+- name: Installing BlackArch on top of ArchLinux
+  hosts: "*"
+
+  tasks:
+    - name: YOLO - Download and execute BlackArch strap.sh
+      ansible.builtin.shell:
+        cmd: curl -sS https://blackarch.org/strap.sh | bash 
+        creates: /etc/pacman.d/blackarch-mirrorlist
+      become: true
+
+    - name: Upgrade system after new repo added
+      become: true
+      community.general.pacman:
+        upgrade: true
