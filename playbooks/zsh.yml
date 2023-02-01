@@ -1,0 +1,98 @@
+---
+- name: Installing Zsh and dependencies
+  hosts: "*"
+
+  tasks:
+    - name: Update list of packages
+      become: true
+      community.general.pacman:
+        update_cache: true
+      
+    - name: Install 'zsh'
+      become: true
+      community.general.pacman:
+        name: extra/zsh
+        state: present
+
+    - name: Install 'git'
+      become: true
+      community.general.pacman:
+        name: extra/git
+        state: present
+
+    - name: Install 'tmux'
+      become: true
+      community.general.pacman:
+        name: community/tmux
+        state: present
+
+    - name: Install 'fzf'
+      become: true
+      community.general.pacman:
+        name: community/fzf
+        state: present
+
+    - name: Download 'antigen.zsh'
+      ansible.builtin.get_url:
+        url: https://git.io/antigen
+        dest: ~/.shell/antigen/antigen.zsh
+        force: true
+        mode: '0644'
+    
+    - name: Remove old '.zshrc' if exists
+      ansible.builtin.file:
+        state: absent
+        path: ~/.zshrc
+
+    - name: Create '.zshrc' for user
+      ansible.builtin.blockinfile:
+        path: ~/.zshrc
+        mode: 0644
+        create: true
+        state: present
+        block: |
+          source  ~/.shell/antigen/antigen.zsh
+
+          # Uncomment the following line to enable command auto-correction.
+          ENABLE_CORRECTION="true"
+
+          # Uncomment the following line to display red dots whilst waiting for completion.
+          COMPLETION_WAITING_DOTS="true"
+
+          # Load the oh-my-zsh's library.
+          antigen use oh-my-zsh
+
+          # Install Plugins
+          antigen bundle git
+          antigen bundle docker
+          antigen bundle docker-compose
+          antigen bundle pip
+          antigen bundle command-not-found
+          antigen bundle nmap
+          antigen bundle cp
+          antigen bundle history
+          antigen bundle man
+          antigen bundle tmux
+          antigen bundle unixorn/fzf-zsh-plugin@main
+          antigen bundle Aloxaf/fzf-tab
+          antigen bundle zsh-users/zsh-autosuggestions
+          antigen bundle zsh-users/zsh-syntax-highlighting
+
+          # Load the theme.
+          antigen theme ys
+
+          # Tell Antigen that you're done.
+          antigen apply
+
+    - name: Get the 'username'
+      ansible.builtin.shell:
+        cmd: whoami
+      changed_when: false
+      register: running_as
+
+    - name: Set 'zsh' for '{{ running_as.stdout }}'.
+      become: true
+      ansible.builtin.user:
+        name: "{{ running_as.stdout }}" 
+        shell: /usr/bin/zsh
+      when: running_as.rc == 0
