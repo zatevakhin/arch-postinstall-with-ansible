@@ -70,6 +70,11 @@
       name: exa
       state: present
 
+  - name: Install 'bat' replacement for 'cat'
+    community.general.pacman:
+      name: cat
+      state: present
+
   - name: Install 'neofetch' because I'm using Arch
     community.general.pacman:
       name: neofetch
