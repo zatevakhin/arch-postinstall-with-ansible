@@ -4,6 +4,7 @@
 
   tasks:
     - name: Update list of packages
+      become: true
       community.general.pacman:
         update_cache: true
 
