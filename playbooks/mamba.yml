@@ -11,6 +11,12 @@
       become: true
       become_user: aura
 
+    - name: Create symbolic link to '/etc/profile.d/conda.sh'
+      ansible.builtin.file:
+        src: /opt/mambaforge/etc/profile.d/conda.sh
+        dest: /etc/profile.d/conda.sh
+        state: link
+
     - name: Recursively change ownership '/opt/mambaforge/pkgs/cache/'
       become: true
       ansible.builtin.file:
