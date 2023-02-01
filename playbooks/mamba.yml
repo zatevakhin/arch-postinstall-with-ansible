@@ -1,0 +1,22 @@
+---
+- name: Installing Mambaforge.
+  hosts: "*"
+
+  tasks:
+    - name: Install 'aur/mambaforge'
+      kewlfft.aur.aur:
+        name: aur/mambaforge
+        use: trizen
+        state: present
+      become: true
+      become_user: aura
+
+    - name: Recursively change ownership '/opt/mambaforge/pkgs/cache/'
+      become: true
+      ansible.builtin.file:
+        path: /opt/mambaforge/pkgs/cache/
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+        mode: '0777'
