@@ -1,7 +1,14 @@
 # Arch post-install with Ansible
 Using Ansible to make post-install configuration of Arch Linux because I can
 
-How to use?
+## Pre-requirements
+
+```bash
+pacman -S community/ansible community/sshpass
+```
+
+
+## How to use?
 
 ```bash
 ansible-playbook playbooks/<playbook.yml>  -u <USER> -i inventory/hosts --ask-pass --ask-become-pass
