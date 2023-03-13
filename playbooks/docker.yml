@@ -19,6 +19,11 @@
         name: docker-compose
         state: present
 
+    - name: Install 'community/docker-buildx'
+      community.general.pacman:
+        name: community/docker-buildx
+        state: present
+
     - name: Install 'aur/doko'
       kewlfft.aur.aur:
         name: aur/doko
