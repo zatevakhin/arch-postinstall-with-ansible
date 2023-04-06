@@ -3,22 +3,30 @@
   hosts: "*"
 
   tasks:
-  - name: Create the `aura` user
+  - name: Create the `pkg` user
     become: true
     ansible.builtin.user:
       system: true
-      name: aura
+      name: pkg
       create_home: true
       group: wheel
 
-  - name: Allow the 'aura' user to run 'sudo pacman' without a password
+  - name: Allow the 'pkg' user to run 'sudo pacman' without a password
     become: true
     ansible.builtin.lineinfile:
-      path: /etc/sudoers.d/11-install-aura
+      path: /etc/sudoers.d/11-pkg
       mode: 0440
-      line: 'aura ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+      line: 'pkg ALL=(ALL) NOPASSWD: /usr/bin/pacman'
       create: true
       validate: 'visudo -cf %s'
+
+  - name: Install 'yay'
+    kewlfft.aur.aur:
+      name: yay
+      use: makepkg
+      state: present
+    become: true
+    become_user: pkg
 
   - name: Install 'trizen'
     kewlfft.aur.aur:
@@ -26,4 +34,4 @@
       use: makepkg
       state: present
     become: true
-    become_user: aura
+    become_user: pkg

@@ -72,7 +72,7 @@
 
   - name: Install 'bat' replacement for 'cat'
     community.general.pacman:
-      name: cat
+      name: bat
       state: present
 
   - name: Install 'neofetch' because I'm using Arch

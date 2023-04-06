@@ -20,4 +20,4 @@
         use: trizen
         state: present
       become: true
-      become_user: aura
+      become_user: pkg
