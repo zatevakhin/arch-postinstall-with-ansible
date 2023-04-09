@@ -1,0 +1,160 @@
+---
+- name: Configure Gnome Apps
+  hosts: "*"
+
+  tasks:
+  - name: Update list of packages
+    community.general.pacman:
+      update_cache: true
+    become: true
+
+  - name: Remove unused apps
+    community.general.pacman:
+      name:
+        - gedit
+        - epiphany
+        - orca
+        - rygel
+        - totem
+        - gnome-logs
+        - gnome-terminal
+      state: absent
+    become: true
+
+  - name: Install additional apps
+    community.general.pacman:
+      name:
+        - python-psutil  # required for community.general.dconf
+        - gnome-tweaks
+        - extra/ffmpegthumbnailer
+        - webp-pixbuf-loader
+      state: present
+    become: true
+    
+  - name: Installing fonts
+    community.general.pacman:
+      name:
+        - noto-fonts
+        - noto-fonts-cjk
+        - noto-fonts-emoji
+        - otf-cascadia-code
+      state: present
+    become: true
+    
+  - name: Install base extensions
+    community.general.pacman:
+      name: 
+        - gnome-shell-extensions
+        - gnome-shell-extension-appindicator
+      state: present
+    become: true
+    
+  - name: Install Extension Manager
+    community.general.flatpak:
+      name: com.mattjakeman.ExtensionManager
+      state: present
+      method: user
+
+
+  #############################################################
+  # Install themes & icons
+  #############################################################
+  - name: Install themes and icons
+    community.general.pacman:
+      name:
+        - adwaita-qt5
+        - adwaita-qt6
+        - gnome-themes-extra
+        #- papirus-icon-theme
+      state: present
+    become: true
+
+  - name: Install configuration tools for KDE apps
+    community.general.pacman:
+      name: qt5ct
+      state: present
+    become: true
+
+  - name: Configure look of KDE apps
+    ansible.builtin.lineinfile:
+      path: /etc/environment
+      mode: 0644
+      line: 'QT_QPA_PLATFORMTHEME=qt5ct'
+      create: true
+    become: true
+
+  #############################################################
+  # Configure Gnome
+  #############################################################
+
+  - name: Set language per-window
+    community.general.dconf:
+      key: "/org/gnome/desktop/input-sources/per-window"
+      value: "true"
+      state: present
+
+  - name: Show weekday in shell clock
+    community.general.dconf:
+      key: "/org/gnome/desktop/interface/clock-show-weekday"
+      value: "true"
+      state: present
+
+  - name: Show week number in Calendar
+    community.general.dconf:
+      key: "/org/gnome/desktop/calendar/show-weekdate"
+      value: "true"
+      state: present
+
+#  - name: Set interface icon theme to 'Papirus-Dark'
+#    community.general.dconf:
+#      key: "/org/gnome/desktop/interface/icon-theme"
+#      value: "'Papirus-Dark'"
+#      state: present
+
+  - name: Enable gnome shell user extensions
+    community.general.dconf:
+      key: "/org/gnome/shell/disable-user-extensions"
+      value: "false"
+      state: present
+
+  - name: Set UI font to Cantarell 10
+    community.general.dconf:
+      key: "/org/gnome/desktop/interface/font-name"
+      value: "'Cantarell 10'"
+      state: present
+      
+  - name: Set Document font to SF Pro Text 11
+    community.general.dconf:
+      key: "/org/gnome/desktop/interface/document-font-name"
+      value: "'Noto Sans 11'"
+      state: present
+      
+  - name: Set Monospace font to SF Mono 10
+    community.general.dconf:
+      key: "/org/gnome/desktop/interface/monospace-font-name"
+      value: "'Cascadia Mono 10'"
+      state: present
+
+  - name: Set title bar uses system font
+    community.general.dconf:
+      key: "/org/gnome/desktop/wm/preferences/titlebar-uses-system-font"
+      value: "true"
+      state: present
+
+  - name: Set title bar font for legacy apps to SF Pro Display Bold 11
+    community.general.dconf:
+      key: "/org/gnome/desktop/wm/preferences/titlebar-font"
+      value: "'Cantarell Bold 11'"
+      state: present
+
+  - name: Set font hinting to medium
+    community.general.dconf:
+      key: "/org/gnome/desktop/interface/font-hinting"
+      value: "'slight'"
+      state: present
+
+  - name: Set font antialiasing to subpixel
+    community.general.dconf:
+      key: "/org/gnome/desktop/interface/font-antialiasing"
+      value: "'rgba'"
+      state: present

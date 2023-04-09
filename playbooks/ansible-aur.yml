@@ -20,14 +20,6 @@
       create: true
       validate: 'visudo -cf %s'
 
-  - name: Install 'yay'
-    kewlfft.aur.aur:
-      name: yay
-      use: makepkg
-      state: present
-    become: true
-    become_user: pkg
-
   - name: Install 'trizen'
     kewlfft.aur.aur:
       name: trizen
@@ -35,3 +27,4 @@
       state: present
     become: true
     become_user: pkg
+

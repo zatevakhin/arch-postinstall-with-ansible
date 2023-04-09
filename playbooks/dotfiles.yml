@@ -1,0 +1,22 @@
+---
+- name: Deploy dotfiles
+  hosts: "*"
+
+  tasks:
+  - name: Clone dotfiles repo
+    ansible.builtin.git:
+      repo: git@github.com:roovio/dotfiles.git
+      dest: ~/.cfg
+
+  - name: Adding symlinks to dotfiles in filesystem
+    ansible.builtin.command:
+      cmd: ./deploy.sh
+      chdir: ~/.cfg
+    changed_when: false
+
+  - name: Installing fontconfig settings
+    ansible.builtin.copy:
+      src: ~/.cfg/fontconfig/
+      dest: /etc/fonts/conf.d
+    become: True
+

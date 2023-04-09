@@ -15,10 +15,25 @@
 
   - name: Remove 'vim'
     community.general.pacman:
-      name:
-        - vim
-        - vim-runtime
+      name: vim
       state: absent
+      
+  - name: Install neovim
+    community.general.pacman:
+      name:
+        - neovim
+        - python-pynvim
+        - wl-clipboard
+      state: present
+
+  - name: Install neovim-symlinks
+    kewlfft.aur.aur:
+      name: 
+        - aur/neovim-symlinks
+      use: trizen
+      state: present
+    become: true
+    become_user: pkg
 
   - name: Install 'midnight Commander'
     community.general.pacman:
@@ -50,6 +65,11 @@
       name: bmon
       state: present
 
+  - name: Install 'tree'
+    community.general.pacman:
+      name: tree
+      state: present
+
   - name: Install 'git'
     community.general.pacman:
       name: git
@@ -58,11 +78,6 @@
   - name: Install 'zsh'
     community.general.pacman:
       name: zsh
-      state: present
-
-  - name: Install 'neovim'
-    community.general.pacman:
-      name: neovim
       state: present
 
   - name: Install 'exa' replacement for 'ls'
@@ -91,6 +106,8 @@
       state: present
 
   - name: Install 'flatpak'
+    become: true
     community.general.pacman:
       name: flatpak
       state: present
+

@@ -1,0 +1,132 @@
+---
+- name: More Apps
+  hosts: "*"
+
+  tasks:
+  - name: Update list of packages
+    community.general.pacman:
+      update_cache: true
+    become: true
+
+  - name: Install Packages (pacman)
+    become: true
+    community.general.pacman:
+      name:
+      
+        # basics
+        - gimp
+        - mpv
+        - keepassxc
+        - remmina
+        
+        # Kicad
+        #- kicad
+        #- kicad-library
+        #- kicad-library-3d
+        
+        # QEMU
+        - edk2-ovmf
+        - qemu-desktop
+        
+        # nice to have gnome apps
+        - sysprof
+        - ghex
+        - gnome-sound-recorder
+        - gnome-recipes
+
+  - name: Install Packages (aur)
+    kewlfft.aur.aur:
+      name: 
+        - aur/steam-devices-git
+      use: trizen
+      state: present
+    become: true
+    become_user: pkg
+
+  - name: Install Flatseal Package (flatpak)
+    community.general.flatpak:
+      name: com.github.tchx84.Flatseal
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Firefox Package (flatpak)
+    community.general.flatpak:
+      name: org.mozilla.firefox
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Chromium Package (flatpak)
+    community.general.flatpak:
+      name: org.chromium.Chromium
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Brave Browser Package (flatpak)
+    community.general.flatpak:
+      name: com.brave.Browser
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Telegram Desktop Package (flatpak)
+    community.general.flatpak:
+      name: org.telegram.desktop
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Telegram Desktop WebView Package (flatpak)
+    community.general.flatpak:
+      name: org.telegram.desktop.webview
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Viber Package (flatpak)
+    community.general.flatpak:
+      name: com.viber.Viber
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install VSCode Package (flatpak)
+    community.general.flatpak:
+      name: com.visualstudio.code
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Emby Theater Package (flatpak)
+    community.general.flatpak:
+      name: media.emby.EmbyTheater
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Steam Package (flatpak)
+    community.general.flatpak:
+      name: com.valvesoftware.Steam
+      method: system
+      remote: flathub
+      state: present
+    become: true
+
+  - name: Install Remembrance Package (flatpak)
+    community.general.flatpak:
+      name: io.github.dgsasha.Remembrance
+      method: system
+      remote: flathub
+      state: present
+    become: true

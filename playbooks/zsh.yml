@@ -1,4 +1,10 @@
 ---
+
+# NOTE:
+# .zshrc will be installed by dotfiles.yml playbook as part of dotfiles
+#
+
+
 - name: Installing Zsh and dependencies
   hosts: "*"
 
@@ -32,57 +38,21 @@
         name: community/fzf
         state: present
 
-    - name: Download 'antigen.zsh'
-      ansible.builtin.get_url:
-        url: https://git.io/antigen
-        dest: ~/.shell/antigen/antigen.zsh
-        force: true
-        mode: '0644'
-    
-    - name: Remove old '.zshrc' if exists
-      ansible.builtin.file:
-        state: absent
-        path: ~/.zshrc
-
-    - name: Create '.zshrc' for user
-      ansible.builtin.blockinfile:
-        path: ~/.zshrc
-        mode: 0644
-        create: true
+    - name: Install 'aur/antibody-bin'
+      kewlfft.aur.aur:
+        name: aur/antibody-bin
+        use: trizen
         state: present
-        block: |
-          source  ~/.shell/antigen/antigen.zsh
-
-          # Uncomment the following line to enable command auto-correction.
-          ENABLE_CORRECTION="true"
-
-          # Uncomment the following line to display red dots whilst waiting for completion.
-          COMPLETION_WAITING_DOTS="true"
-
-          # Load the oh-my-zsh's library.
-          antigen use oh-my-zsh
-
-          # Install Plugins
-          antigen bundle git
-          antigen bundle docker
-          antigen bundle docker-compose
-          antigen bundle pip
-          antigen bundle command-not-found
-          antigen bundle nmap
-          antigen bundle cp
-          antigen bundle history
-          antigen bundle man
-          antigen bundle tmux
-          antigen bundle unixorn/fzf-zsh-plugin@main
-          antigen bundle Aloxaf/fzf-tab
-          antigen bundle zsh-users/zsh-autosuggestions
-          antigen bundle zsh-users/zsh-syntax-highlighting
-
-          # Load the theme.
-          antigen theme ys
-
-          # Tell Antigen that you're done.
-          antigen apply
+      become: true
+      become_user: pkg
+      
+    - name: Install 'aur/find-the-command'
+      kewlfft.aur.aur:
+        name: aur/find-the-command
+        use: trizen
+        state: present
+      become: true
+      become_user: pkg
 
     - name: Get the 'username'
       ansible.builtin.shell:
