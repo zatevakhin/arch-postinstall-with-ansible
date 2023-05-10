@@ -7,7 +7,7 @@
       become: true
       community.general.pacman:
         update_cache: true
-      
+
     - name: Install 'zsh'
       become: true
       community.general.pacman:
@@ -32,13 +32,18 @@
         name: community/fzf
         state: present
 
+    - name: Create directory for Antigen
+      ansible.builtin.file:
+        path: ~/.shell/antigen/
+        state: directory
+
     - name: Download 'antigen.zsh'
       ansible.builtin.get_url:
         url: https://git.io/antigen
         dest: ~/.shell/antigen/antigen.zsh
         force: true
         mode: '0644'
-    
+
     - name: Remove old '.zshrc' if exists
       ansible.builtin.file:
         state: absent
@@ -93,6 +98,6 @@
     - name: Set 'zsh' for '{{ running_as.stdout }}'.
       become: true
       ansible.builtin.user:
-        name: "{{ running_as.stdout }}" 
+        name: "{{ running_as.stdout }}"
         shell: /usr/bin/zsh
       when: running_as.rc == 0

@@ -23,3 +23,8 @@ Recommended installation order:
 - `ansible.yml`
 - `ansible-aur.yml`
 - `other playbooks`
+
+
+### If you installing on different machine add `kewlfft.aur` locally
+
+By executing `ansible-galaxy collection install kewlfft.aur`.

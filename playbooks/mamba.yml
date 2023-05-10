@@ -12,6 +12,7 @@
       become_user: aura
 
     - name: Create symbolic link to '/etc/profile.d/conda.sh'
+      become: true
       ansible.builtin.file:
         src: /opt/mambaforge/etc/profile.d/conda.sh
         dest: /etc/profile.d/conda.sh

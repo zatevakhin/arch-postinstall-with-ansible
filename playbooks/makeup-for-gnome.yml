@@ -9,6 +9,15 @@
     become: true
 
   #############################################################
+  # Install dependencies
+  #############################################################
+  - name: Install 'python-psutil'
+    community.general.pacman:
+      name: community/python-psutil
+      state: present
+    become: true
+
+  #############################################################
   # Clean gnome unused gnome packages after install
   #############################################################
   - name: Remove 'gedit'
