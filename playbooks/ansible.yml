@@ -30,3 +30,11 @@
       ansible.builtin.command:
         cmd: ansible-galaxy collection install kewlfft.aur
       changed_when: false
+
+    - name: Ansible disable cowsay
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        mode: 0644
+        line: 'ANSIBLE_NOCOWS=1'
+        create: true
+      become: true
