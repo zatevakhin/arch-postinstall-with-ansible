@@ -1,0 +1,210 @@
+---
+- name: Install additional apps
+  hosts: "*"
+
+  tasks:
+    #############################################################
+    # Enable flathub
+    #############################################################
+    - name: Add the flathub flatpak repository remote to the user installation
+      community.general.flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: system
+      become: true
+    #############################################################
+    # Install apps from Arch Repos
+    #############################################################
+    - name: Install additional apps
+      community.general.pacman:
+        name:
+          - community/mpv
+          - community/flameshot
+          - community/keepassxc
+          - community/copyq
+          - community/helvum
+          - community/syncthing
+
+          - extra/gparted
+          - extra/edk2-ovmf
+          - extra/qemu-desktop
+        state: present
+      become: true
+
+    #############################################################
+    # Install apps from Arch Users repos
+    #############################################################
+    - name: Install packages from AUR
+      kewlfft.aur.aur:
+        use: trizen
+        name:
+          - aur/syncthing-gtk
+          - aur/youtube-music-bin
+          - aur/foxglove-studio-bin
+        state: present
+      become_user: aura
+      become: true
+
+    #############################################################
+    # Install flatpak apps
+    #############################################################
+    - name: Install Flatseal (flatpak)
+      community.general.flatpak:
+        name: com.github.tchx84.Flatseal
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Firefox (flatpak)
+      community.general.flatpak:
+        name: org.mozilla.firefox
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Chromium (flatpak)
+      community.general.flatpak:
+        name: org.chromium.Chromium
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Telegram Desktop (flatpak)
+      community.general.flatpak:
+        name: org.telegram.desktop
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Slack Desktop (flatpak)
+      community.general.flatpak:
+        name: com.slack.Slack
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Signal Desktop (flatpak)
+      community.general.flatpak:
+        name: org.signal.Signal
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Discord (flatpak)
+      community.general.flatpak:
+        name: com.discordapp.Discord
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Steam (flatpak)
+      community.general.flatpak:
+        name: com.valvesoftware.Steam
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Gradience (flatpak)
+      community.general.flatpak:
+        name: com.github.GradienceTeam.Gradience
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Obsidian (flatpak)
+      community.general.flatpak:
+        name: md.obsidian.Obsidian
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Kdenlive (flatpak)
+      community.general.flatpak:
+        name: org.kde.kdenlive
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Onlyoffice (flatpak)
+      community.general.flatpak:
+        name: org.onlyoffice.desktopeditors
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install OBS Studio (flatpak)
+      community.general.flatpak:
+        name: com.obsproject.Studio
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Arduino IDE (flatpak)
+      community.general.flatpak:
+        name: cc.arduino.IDE2
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Identity (flatpak)
+      community.general.flatpak:
+        name: org.gnome.gitlab.YaLTeR.Identity
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Dialect (flatpak)
+      community.general.flatpak:
+        name: app.drey.Dialect
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Metadata Cleaner (flatpak)
+      community.general.flatpak:
+        name: fr.romainvigier.MetadataCleaner
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Solanum (flatpak)
+      community.general.flatpak:
+        name: org.gnome.Solanum
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Krita (flatpak)
+      community.general.flatpak:
+        name: org.kde.krita
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install qFlipper (flatpak)
+      community.general.flatpak:
+        name: one.flipperzero.qFlipper
+        method: system
+        remote: flathub
+        state: present
+      become: true

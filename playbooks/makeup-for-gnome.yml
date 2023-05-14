@@ -47,7 +47,7 @@
       become: true
 
     #############################################################
-    # Clean gnome unused gnome packages after install
+    # Install gnome packages
     #############################################################
     - name: Install additional apps
       community.general.pacman:
@@ -65,45 +65,6 @@
         state: present
       become: true
 
-    - name: Install Flatseal Package (flatpak)
-      community.general.flatpak:
-        name: com.github.tchx84.Flatseal
-        method: system
-        remote: flathub
-        state: present
-      become: true
-
-    - name: Install Firefox Package (flatpak)
-      community.general.flatpak:
-        name: org.mozilla.firefox
-        method: system
-        remote: flathub
-        state: present
-      become: true
-
-    - name: Install Telegram Desktop Package (flatpak)
-      community.general.flatpak:
-        name: org.telegram.desktop
-        method: system
-        remote: flathub
-        state: present
-      become: true
-
-    - name: Install Steam Package (flatpak)
-      community.general.flatpak:
-        name: com.valvesoftware.Steam
-        method: system
-        remote: flathub
-        state: present
-      become: true
-
-    - name: Install Gradience Package (flatpak)
-      community.general.flatpak:
-        name: com.github.GradienceTeam.Gradience
-        method: system
-        remote: flathub
-        state: present
-      become: true
     #############################################################
     # Install extensions
     #############################################################
@@ -115,12 +76,13 @@
         state: present
       become: true
 
-    # - name: Install Extension Manager
-    #   community.general.flatpak:
-    #     name: com.mattjakeman.ExtensionManager
-    #     state: present
-    #     method: user
-    #   become: true
+    - name: Install Extension Manager
+      community.general.flatpak:
+        name: com.mattjakeman.ExtensionManager
+        remote: flathub
+        state: present
+        method: system
+      become: true
 
     #############################################################
     # Install themes & icons
