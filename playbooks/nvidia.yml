@@ -1,0 +1,45 @@
+---
+- name: Install Nvidia drivers & tools
+  hosts: "*"
+
+  tasks:
+    - name: Update list of packages
+      community.general.pacman:
+        update_cache: true
+      become: true
+
+    - name: Install Nvidia
+      community.general.pacman:
+        name:
+          - extra/nvidia-dkms
+          - extra/nvidia-utils
+          - extra/nvidia-settings
+          - extra/opencl-nvidia
+          - community/cuda
+          - community/nvtop
+        state: present
+      become: true
+
+    - name: Create '20-nvidia.conf' for X11
+      ansible.builtin.blockinfile:
+        path: /etc/X11/xorg.conf.d/20-nvidia.conf
+        mode: 0644
+        create: true
+        state: present
+        block: |
+          Section "OutputClass"
+            Identifier "intel"
+            MatchDriver "i915"
+            Driver "modesetting"
+          EndSection
+
+          Section "OutputClass"
+            Identifier "nvidia"
+            MatchDriver "nvidia-drm"
+            Driver "nvidia"
+            Option "AllowEmptyInitialConfiguration"
+            Option "PrimaryGPU" "yes"
+            ModulePath "/usr/lib/nvidia/xorg"
+            ModulePath "/usr/lib/xorg/modules"
+          EndSection
+      become: true
