@@ -14,6 +14,7 @@
           - aur/tuxedo-control-center-bin
           - aur/tuxedo-keyboard-dkms
           - aur/tuxedo-keyboard-tools
+          - aur/tuxedo-touchpad-switch
         use: trizen
         state: present
       become_user: aura

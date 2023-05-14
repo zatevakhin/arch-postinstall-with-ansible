@@ -20,26 +20,11 @@
         state: present
       become: true
 
-    - name: Create '20-nvidia.conf' for X11
-      ansible.builtin.blockinfile:
-        path: /etc/X11/xorg.conf.d/20-nvidia.conf
-        mode: 0644
-        create: true
+    - name: GPU Profile Selector
+      kewlfft.aur.aur:
+        name:
+          - aur/gnome-shell-extension-gpu-profile-selector-git
+        use: trizen
         state: present
-        block: |
-          Section "OutputClass"
-            Identifier "intel"
-            MatchDriver "i915"
-            Driver "modesetting"
-          EndSection
-
-          Section "OutputClass"
-            Identifier "nvidia"
-            MatchDriver "nvidia-drm"
-            Driver "nvidia"
-            Option "AllowEmptyInitialConfiguration"
-            Option "PrimaryGPU" "yes"
-            ModulePath "/usr/lib/nvidia/xorg"
-            ModulePath "/usr/lib/xorg/modules"
-          EndSection
+      become_user: aura
       become: true
