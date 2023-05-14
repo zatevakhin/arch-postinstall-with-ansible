@@ -1,0 +1,67 @@
+---
+- name: Installing Tilix and configuring
+  hosts: "*"
+
+  tasks:
+    - name: Update list of packages
+      become: true
+      community.general.pacman:
+        update_cache: true
+
+    - name: Install 'tilix'
+      become: true
+      community.general.pacman:
+        name: community/tilix
+        state: present
+
+    #############################################################
+    # Configure Gnome
+    #############################################################
+    - name: Zoom with Control + Mouse wheel
+      community.general.dconf:
+        key: "/com/gexperts/Tilix/control-scroll-zoom"
+        value: "true"
+        state: present
+
+    - name: Use tabs
+      community.general.dconf:
+        key: "/com/gexperts/Tilix/use-tabs"
+        value: "true"
+        state: present
+
+    - name: Remove terminal titles
+      community.general.dconf:
+        key: "/com/gexperts/Tilix/terminal-title-style"
+        value: "'none'"
+        state: present
+
+    - name: Set tabs positions
+      community.general.dconf:
+        key: "/com/gexperts/Tilix/tab-position"
+        value: "'bottom'"
+        state: present
+
+    - name: Create custom key bind for Tilix Quake
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+        value: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+        state: present
+
+    - name: Set toggle for Tilix Quake
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name"
+        value: "'Tilix Quake'"
+        state: present
+
+    - name: Set toggle for Tilix Quake
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding"
+        value: "'F12'"
+        state: present
+
+    - name: Set command for Tilix Quake key bind
+      community.general.dconf:
+        key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command"
+        value: "'tilix --quake'"
+        state: present
+
