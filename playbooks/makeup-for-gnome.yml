@@ -201,3 +201,15 @@
         key: "/org/gnome/desktop/interface/font-antialiasing"
         value: "'rgba'"
         state: present
+
+    - name: Nautilus show Size as first
+      community.general.dconf:
+        key: "/org/gnome/nautilus/icon-view/captions"
+        value: "['size', 'none', 'none']"
+        state: present
+
+    - name: Remove system sounds
+      community.general.dconf:
+        key: "/org/gnome/desktop/sound/event-sounds"
+        value: "false"
+        state: present

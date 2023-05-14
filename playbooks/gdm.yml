@@ -1,0 +1,21 @@
+---
+- name: GDM Enable auto login
+  hosts: "*"
+
+  tasks:
+    - name: Get the 'username'
+      ansible.builtin.shell:
+        cmd: whoami
+      changed_when: false
+      register: running_as
+
+    - name: GDM Enable auto login
+      ansible.builtin.lineinfile:
+        path: /etc/gdm/custom.conf
+        line: |
+          AutomaticLoginEnable=True
+          AutomaticLogin={{ running_as.stdout }}
+        insertafter: '\[daemon\]'
+        state: present
+      become: true
+      when: running_as.rc == 0
