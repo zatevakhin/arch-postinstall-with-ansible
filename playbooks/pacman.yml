@@ -1,0 +1,28 @@
+---
+- name: Configure pacman
+  hosts: "*"
+
+  tasks:
+    #############################################################
+    # Enable [multilib]
+    #############################################################
+    - name: Enable multilib in pacman.conf
+      ansible.builtin.replace:
+        path: /etc/pacman.conf
+        regexp: '#\[(multilib)\]\n#Include = /etc/pacman.d/mirrorlist'
+        replace: '[multilib]\nInclude = /etc/pacman.d/mirrorlist'
+      become: true
+
+    - name: Update list of packages
+      community.general.pacman:
+        update_cache: true
+      become: true
+
+    #############################################################
+    # Autostart apps
+    #############################################################
+    - name: Create Pacman Hooks directory
+      ansible.builtin.file:
+        path: /etc/pacman.d/hooks/
+        state: directory
+        mode: '0755'
