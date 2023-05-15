@@ -11,9 +11,11 @@
     #############################################################
     # Install dependencies
     #############################################################
-    - name: Install 'python-psutil'
+    - name: Install dependencies
       community.general.pacman:
-        name: community/python-psutil # required for community.general.dconf
+        name:
+          - community/python-psutil # required for community.general.dconf
+          - community/npm # required by 'aur/gnome-shell-extension-material-you-theme-git'
         state: present
       become: true
 
@@ -27,6 +29,7 @@
         flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
         method: system
       become: true
+
     #############################################################
     # Clean gnome unused gnome packages after install
     #############################################################
@@ -61,7 +64,10 @@
           - extra/eog
           - extra/file-roller
           - extra/dconf-editor
-          - webp-pixbuf-loader
+          - community/webp-pixbuf-loader
+          - community/fwupd
+          - community/fwupd-efi
+          - community/gnome-firmware
         state: present
       become: true
 
@@ -74,6 +80,17 @@
           - gnome-shell-extensions
           - gnome-shell-extension-appindicator
         state: present
+      become: true
+
+    - name: Install extensions from AUR
+      kewlfft.aur.aur:
+        use: trizen
+        name:
+          - aur/gnome-shell-extension-blur-my-shell
+          - aur/gnome-shell-extension-tiling-assistant
+          - aur/gnome-shell-extension-space-bar-git
+        state: present
+      become_user: aura
       become: true
 
     - name: Install Extension Manager
@@ -104,8 +121,24 @@
     - name: Add 'qt5ct' into '/etc/environment'
       ansible.builtin.lineinfile:
         path: /etc/environment
-        mode: 0644
+        mode: '0644'
         line: 'QT_QPA_PLATFORMTHEME=qt5ct'
+        create: true
+      become: true
+
+    - name: Set default theme as 'Adwaita-Dark'
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        mode: '0644'
+        line: 'QT_STYLE_OVERRIDE=Adwaita-Dark'
+        create: true
+      become: true
+
+    - name: Set platform theme as Gnome
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        mode: '0644'
+        line: 'QT_QPA_PLATFORMTHEME=gnome'
         create: true
       become: true
 
@@ -116,6 +149,12 @@
       community.general.dconf:
         key: "/org/gnome/shell/disable-user-extensions"
         value: "false"
+        state: present
+
+    - name: Set list of enabled extensions
+      community.general.dconf:
+        key: "/org/gnome/shell/enabled-extensions"
+        value: "['GPU_profile_selector@lorenzo9904.gmail.com', 'appindicatorsupport@rgcjonas.gmail.com', 'blur-my-shell@aunetx', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'tiling-assistant@leleat-on-github', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'space-bar@luchrioh']"
         state: present
 
     - name: Set windwos buttons 'minimize,maximize,close'
@@ -212,4 +251,92 @@
       community.general.dconf:
         key: "/org/gnome/desktop/sound/event-sounds"
         value: "false"
+        state: present
+
+    #############################################################
+    # Setting Wallpaper
+    #############################################################
+    - name: Create directory for Wallpapers
+      ansible.builtin.file:
+        path: /usr/share/backgrounds/custom
+        state: directory
+        mode: '0755'
+      become: true
+
+    - name: 'Download wallpaper #1'
+      ansible.builtin.get_url:
+        url: https://w.wallhaven.cc/full/kw/wallhaven-kwwgx7.jpg
+        dest: /usr/share/backgrounds/custom/wallhaven-kwwgx7.jpg
+        checksum: sha1:de704a1acd0af436f31c8b1efd36846f38fd2b43
+        force: true
+        mode: '0644'
+      become: true
+
+    - name: 'Download wallpaper #2'
+      ansible.builtin.get_url:
+        url: https://w.wallhaven.cc/full/lm/wallhaven-lmmo8r.jpg
+        dest: /usr/share/backgrounds/custom/wallhaven-lmmo8r.jpg
+        checksum: sha1:afb93ca794da2264d405ab3626cda467793248c4
+        force: true
+        mode: '0644'
+      become: true
+
+    - name: 'Download wallpaper #3'
+      ansible.builtin.get_url:
+        url: https://w.wallhaven.cc/full/83/wallhaven-833w52.jpg
+        dest: /usr/share/backgrounds/custom/wallhaven-833w52.jpg
+        checksum: sha1:ebf01334d96dbb45be7269e9459698440a1965d3
+        force: true
+        mode: '0644'
+      become: true
+
+    - name: 'Download wallpaper #4'
+      ansible.builtin.get_url:
+        url: https://w.wallhaven.cc/full/9m/wallhaven-9mel2k.png
+        dest: /usr/share/backgrounds/custom/wallhaven-9mel2k.jpg
+        checksum: sha1:574dbf55af3e304e33527a6b3a5a899b68197864
+        force: true
+        mode: '0644'
+      become: true
+
+    - name: Set background picture
+      community.general.dconf:
+        key: '/org/gnome/desktop/background/picture-uri'
+        value: "'file:///usr/share/backgrounds/custom/wallhaven-9mel2k.jpg'"
+        state: present
+
+    - name: Set background picture (dark mode)
+      community.general.dconf:
+        key: '/org/gnome/desktop/background/picture-uri-dark'
+        value: "'file:///usr/share/backgrounds/custom/wallhaven-9mel2k.jpg'"
+        state: present
+
+    - name: Set screensaver picture
+      community.general.dconf:
+        key: '/org/gnome/desktop/background/picture-uri-dark'
+        value: "'file:///usr/share/backgrounds/custom/wallhaven-9mel2k.jpg'"
+        state: present
+
+    - name: Set background primary color
+      community.general.dconf:
+        key: '/org/gnome/desktop/background/primary-color'
+        value: "'#000000000000'"
+        state: present
+
+    - name: Set background secondary color
+      community.general.dconf:
+        key: '/org/gnome/desktop/background/secondary-color'
+        value: "'#000000000000'"
+        state: present
+
+    - name: Set screensaver primary color
+      community.general.dconf:
+        key: '/org/gnome/desktop/screensaver/primary-color'
+        value: "'#000000000000'"
+        state: present
+
+    - name: Set screensaver secondary color
+      community.general.dconf:
+        key: '/org/gnome/desktop/screensaver/secondary-color'
+        value: "'#000000000000'"
         state: present

@@ -42,9 +42,31 @@
           - aur/syncthing-gtk
           - aur/youtube-music-bin
           - aur/foxglove-studio-bin
+          - aur/visual-studio-code-bin
         state: present
       become_user: aura
       become: true
+
+    - name: Create hook for VSCode
+      become: true
+      ansible.builtin.blockinfile:
+        path: /etc/pacman.d/hooks/vscode.hook
+        mode: '0644'
+        create: true
+        state: present
+        block: |
+          [Trigger]
+          Operation=Install
+          Operation=Upgrade
+          Type=Package
+          Target=visual-studio-code-bin
+
+          [Action]
+          Description=Fix files associations after VSCode
+          Depends=sed
+          When=PostTransaction
+          NeedsTargets
+          Exec=/bin/sh -c 'sed -i "s/\(inode\/directory=\|text\/plain=\)code.desktop;\(.*\)/\1\2/g" /usr/share/applications/mimeinfo.cache; sed -i "s/text\/plain;inode\/directory;//g" /usr/share/applications/code.desktop'
 
     #############################################################
     # Install flatpak apps
@@ -208,3 +230,40 @@
         remote: flathub
         state: present
       become: true
+
+    - name: Install ImHex (flatpak)
+      community.general.flatpak:
+        name: net.werwolv.ImHex
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    #############################################################
+    # Autostart apps
+    #############################################################
+    - name: Create user Autostart directory
+      ansible.builtin.file:
+        path: ~/.config/autostart/
+        state: directory
+        mode: '0755'
+
+    - name: CopyQ
+      ansible.builtin.copy:
+        remote_src: true
+        src: /usr/share/applications/com.github.hluk.copyq.desktop
+        dest: ~/.config/autostart/com.github.hluk.copyq.desktop
+        mode: '0755'
+
+    - name: Run CopyQ in tray mode
+      ansible.builtin.lineinfile:
+        path: ~/.config/autostart/com.github.hluk.copyq.desktop
+        regexp: '^Exec=copyq --start-server show'
+        line: Exec=copyq --start-server
+
+    - name: Flameshot
+      ansible.builtin.copy:
+        remote_src: true
+        src: /usr/share/applications/org.flameshot.Flameshot.desktop
+        dest: ~/.config/autostart/org.flameshot.Flameshot.desktop
+        mode: '0755'

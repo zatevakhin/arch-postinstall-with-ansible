@@ -90,7 +90,19 @@
       name: mlocate
       state: present
 
+  - name: Install 'ripgrep'
+    community.general.pacman:
+      name:
+        - ripgrep
+        - ripgrep-all
+      state: present
+
   - name: Install 'flatpak'
     community.general.pacman:
       name: flatpak
+      state: present
+
+  - name: Install 'wireguard-tools'
+    community.general.pacman:
+      name: extra/wireguard-tools
       state: present
