@@ -34,7 +34,7 @@
     - name: Ansible disable cowsay
       ansible.builtin.lineinfile:
         path: /etc/environment
-        mode: 0644
+        mode: '0644'
         line: 'ANSIBLE_NOCOWS=1'
         create: true
       become: true
