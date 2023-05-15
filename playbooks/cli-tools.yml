@@ -65,6 +65,14 @@
       name: neovim
       state: present
 
+  - name: Set 'neovim' as default editor
+    ansible.builtin.lineinfile:
+      path: /etc/environment
+      mode: '0644'
+      line: 'EDITOR=nvim'
+      create: true
+    become: true
+
   - name: Install 'exa' replacement for 'ls'
     community.general.pacman:
       name: exa
