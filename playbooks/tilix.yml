@@ -62,6 +62,5 @@
     - name: Set command for Tilix Quake key bind
       community.general.dconf:
         key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command"
-        value: "'tilix --quake'"
+        value: "\"bash -c 'GDK_BACKEND=x11 tilix --quake'\""
         state: present
-
