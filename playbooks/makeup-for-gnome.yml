@@ -112,7 +112,15 @@
           - gnome-themes-extra
           - papirus-icon-theme
           - qt5ct
+          - extra/noto-fonts
+          - extra/noto-fonts-cjk
+          - extra/noto-fonts-emoji
+          - extra/noto-fonts-extra
+          - community/ttf-dejavu
           - community/ttf-fira-code
+          - extra/adobe-source-code-pro-fonts
+          - community/adobe-source-han-sans-jp-fonts
+          - community/adobe-source-han-serif-jp-fonts
         state: present
       become: true
 
