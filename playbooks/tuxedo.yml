@@ -15,7 +15,24 @@
           - aur/tuxedo-keyboard-dkms
           - aur/tuxedo-keyboard-tools
           - aur/tuxedo-touchpad-switch
+          - aur/tuxedo-keyboard-ite-dkms
         use: trizen
         state: present
       become_user: aura
       become: true
+
+    #############################################################
+    # Autostart apps
+    #############################################################
+    - name: Create user Autostart directory
+      ansible.builtin.file:
+        path: ~/.config/autostart/
+        state: directory
+        mode: '0755'
+
+    - name: Tuxedo Control Center (tray)
+      ansible.builtin.copy:
+        remote_src: true
+        src: /opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center-tray.desktop
+        dest: ~/.config/autostart/tuxedo-control-center-tray.desktop
+        mode: '0755'
