@@ -102,9 +102,9 @@
       become: true
 
     #############################################################
-    # Install themes & icons
+    # Install themes, icons & fonts
     #############################################################
-    - name: Install themes & icons
+    - name: Install themes, icons & fonts
       community.general.pacman:
         name:
           - adwaita-qt5
@@ -112,6 +112,7 @@
           - gnome-themes-extra
           - papirus-icon-theme
           - qt5ct
+          - community/ttf-fira-code
         state: present
       become: true
 
