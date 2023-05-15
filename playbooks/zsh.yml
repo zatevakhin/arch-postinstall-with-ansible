@@ -36,6 +36,7 @@
       ansible.builtin.file:
         path: ~/.shell/antigen/
         state: directory
+        mode: '0755'
 
     - name: Download 'antigen.zsh'
       ansible.builtin.get_url:
@@ -52,7 +53,7 @@
     - name: Create '.zshrc' for user
       ansible.builtin.blockinfile:
         path: ~/.zshrc
-        mode: 0644
+        mode: '0644'
         create: true
         state: present
         block: |
