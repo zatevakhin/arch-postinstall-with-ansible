@@ -6,7 +6,7 @@
     - name: Install 'aur/mambaforge'
       kewlfft.aur.aur:
         name: aur/mambaforge
-        use: trizen
+        use: paru
         state: present
       become: true
       become_user: aura
