@@ -73,9 +73,9 @@
       create: true
     become: true
 
-  - name: Install 'exa' replacement for 'ls'
+  - name: Install 'eza' replacement for 'ls'
     community.general.pacman:
-      name: exa
+      name: eza
       state: present
 
   - name: Install 'bat' replacement for 'cat'
