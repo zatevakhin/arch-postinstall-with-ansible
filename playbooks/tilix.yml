@@ -11,7 +11,13 @@
     - name: Install 'tilix'
       become: true
       community.general.pacman:
-        name: community/tilix
+        name: extra/tilix
+        state: present
+
+    - name: Install 'python-psutil'
+      become: true
+      community.general.pacman:
+        name: extra/python-psutil
         state: present
 
     #############################################################
