@@ -20,9 +20,9 @@
         create: true
         validate: 'visudo -cf %s'
 
-    - name: Install 'trizen'
+    - name: Install 'paru'
       kewlfft.aur.aur:
-        name: trizen
+        name: paru
         use: makepkg
         state: present
       become: true
