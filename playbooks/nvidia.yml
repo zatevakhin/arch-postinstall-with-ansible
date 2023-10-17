@@ -11,20 +11,22 @@
     - name: Install Nvidia
       community.general.pacman:
         name:
+          - core/linux-headers
+          - core/linux-lts-headers
           - extra/nvidia-dkms
           - extra/nvidia-utils
           - extra/nvidia-settings
           - extra/opencl-nvidia
-          - community/cuda
-          - community/nvtop
+          - extra/cuda
+          - extra/nvtop
         state: present
       become: true
 
-    - name: GPU Profile Selector
-      kewlfft.aur.aur:
-        name:
-          - aur/gnome-shell-extension-gpu-profile-selector-git
-        use: trizen
-        state: present
-      become_user: aura
-      become: true
+    # - name: GPU Profile Selector
+    #   kewlfft.aur.aur:
+    #     name:
+    #       - aur/gnome-shell-extension-gpu-profile-selector-git
+    #     use: paru
+    #     state: present
+    #   become_user: aura
+    #   become: true
