@@ -2,7 +2,6 @@
 - name: Install Docker and my favorite tools for Docker
   hosts: "*"
 
-  become: true
   tasks:
     - name: Update list of packages
       community.general.pacman:
@@ -21,21 +20,13 @@
 
     - name: Install 'community/docker-buildx'
       community.general.pacman:
-        name: community/docker-buildx
+        name: extra/docker-buildx
         state: present
-
-    - name: Install 'aur/doko'
-      kewlfft.aur.aur:
-        name: aur/doko
-        use: trizen
-        state: present
-      become: true
-      become_user: aura
 
     - name: Install 'aur/python-rocker'
       kewlfft.aur.aur:
         name: aur/python-rocker
-        use: trizen
+        use: paru
         state: present
       become: true
       become_user: aura
@@ -46,3 +37,17 @@
         enabled: true
         state: started
         masked: false
+      become: true
+
+    - name: Get the 'username'
+      ansible.builtin.shell:
+        cmd: whoami
+      changed_when: false
+      register: running_as
+
+    - name: Add the user '{{ running_as.stdout }}' to the docker groups
+      ansible.builtin.user:
+        name: "{{ running_as.stdout }}"
+        groups: docker
+        append: yes
+      become: true
