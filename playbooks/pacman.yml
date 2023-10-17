@@ -17,6 +17,16 @@
       community.general.pacman:
         update_cache: true
       become: true
+    
+    #############################################################
+    # Enable Color
+    #############################################################    
+    - name: Enable multilib in pacman.conf
+      ansible.builtin.replace:
+        path: /etc/pacman.conf
+        regexp: '#Color'
+        replace: 'Color'
+      become: true
 
     #############################################################
     # Autostart apps
@@ -26,3 +36,4 @@
         path: /etc/pacman.d/hooks/
         state: directory
         mode: '0755'
+      become: true
