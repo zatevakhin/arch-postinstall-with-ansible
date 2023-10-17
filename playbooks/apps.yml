@@ -19,13 +19,7 @@
     - name: Install additional apps
       community.general.pacman:
         name:
-          - community/mpv
-          - community/flameshot
-          - community/keepassxc
-          - community/copyq
-          - community/helvum
-          - community/syncthing
-
+          - extra/syncthing
           - extra/gparted
           - extra/edk2-ovmf
           - extra/qemu-desktop
@@ -37,10 +31,9 @@
     #############################################################
     - name: Install packages from AUR
       kewlfft.aur.aur:
-        use: trizen
+        use: paru
         name:
           - aur/syncthing-gtk
-          - aur/youtube-music-bin
           - aur/foxglove-studio-bin
           - aur/visual-studio-code-bin
         state: present
@@ -71,6 +64,46 @@
     #############################################################
     # Install flatpak apps
     #############################################################
+    - name: Install Flameshot (flatpak)
+      community.general.flatpak:
+        name: org.flameshot.Flameshot
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Helvum (flatpak)
+      community.general.flatpak:
+        name: org.pipewire.Helvum
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install CopyQ (flatpak)
+      community.general.flatpak:
+        name: com.github.hluk.copyq
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install KeePassXC (flatpak)
+      community.general.flatpak:
+        name: org.keepassxc.KeePassXC
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install MPV (flatpak)
+      community.general.flatpak:
+        name: io.mpv.Mpv
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
     - name: Install Flatseal (flatpak)
       community.general.flatpak:
         name: com.github.tchx84.Flatseal
@@ -207,9 +240,9 @@
         state: present
       become: true
 
-    - name: Install Solanum (flatpak)
+    - name: Install Pomodoro (flatpak)
       community.general.flatpak:
-        name: org.gnome.Solanum
+        name: io.gitlab.idevecore.Pomodoro
         method: system
         remote: flathub
         state: present
@@ -239,6 +272,14 @@
         state: present
       become: true
 
+    - name: Install Mission Center (flatpak)
+      community.general.flatpak:
+        name: io.missioncenter.MissionCenter
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
     #############################################################
     # Autostart apps
     #############################################################
@@ -251,19 +292,26 @@
     - name: CopyQ
       ansible.builtin.copy:
         remote_src: true
-        src: /usr/share/applications/com.github.hluk.copyq.desktop
+        src: /var/lib/flatpak/exports/share/applications/com.github.hluk.copyq.desktop
         dest: ~/.config/autostart/com.github.hluk.copyq.desktop
         mode: '0755'
 
     - name: Run CopyQ in tray mode
       ansible.builtin.lineinfile:
         path: ~/.config/autostart/com.github.hluk.copyq.desktop
-        regexp: '^Exec=copyq --start-server show'
-        line: Exec=copyq --start-server
+        regexp: '^Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=copyq com.github.hluk.copyq --start-server show'
+        line: Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=copyq com.github.hluk.copyq --start-server
 
     - name: Flameshot
       ansible.builtin.copy:
         remote_src: true
-        src: /usr/share/applications/org.flameshot.Flameshot.desktop
+        src: /var/lib/flatpak/exports/share/applications/org.flameshot.Flameshot.desktop
         dest: ~/.config/autostart/org.flameshot.Flameshot.desktop
+        mode: '0755'
+
+    - name: Syncthing GTK
+      ansible.builtin.copy:
+        remote_src: true
+        src: /usr/share/applications/syncthing-gtk.desktop
+        dest: ~/.config/autostart/syncthing-gtk.desktop
         mode: '0755'
