@@ -23,13 +23,13 @@
     - name: Install 'tmux'
       become: true
       community.general.pacman:
-        name: community/tmux
+        name: extra/tmux
         state: present
 
     - name: Install 'fzf'
       become: true
       community.general.pacman:
-        name: community/fzf
+        name: extra/fzf
         state: present
 
     - name: Create directory for Antigen
@@ -70,8 +70,8 @@
 
           # Install Plugins
           antigen bundle git
-          antigen bundle docker
-          antigen bundle docker-compose
+          # antigen bundle docker
+          # antigen bundle docker-compose
           antigen bundle pip
           antigen bundle command-not-found
           antigen bundle nmap
