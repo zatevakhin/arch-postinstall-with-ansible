@@ -14,8 +14,7 @@
     - name: Install dependencies
       community.general.pacman:
         name:
-          - community/python-psutil # required for community.general.dconf
-          - community/npm # required by 'aur/gnome-shell-extension-material-you-theme-git'
+          - extra/python-psutil # required for community.general.dconf
         state: present
       become: true
 
@@ -46,6 +45,7 @@
           - gnome-music
           - gnome-photos
           - gnome-terminal
+          - gnome-system-monitor
         state: absent
       become: true
 
@@ -64,10 +64,8 @@
           - extra/eog
           - extra/file-roller
           - extra/dconf-editor
-          - community/webp-pixbuf-loader
-          - community/fwupd
-          - community/fwupd-efi
-          - community/gnome-firmware
+          - extra/webp-pixbuf-loader
+          - extra/gnome-firmware
         state: present
       become: true
 
@@ -84,11 +82,11 @@
 
     - name: Install extensions from AUR
       kewlfft.aur.aur:
-        use: trizen
+        use: paru
         name:
           - aur/gnome-shell-extension-blur-my-shell
           - aur/gnome-shell-extension-tiling-assistant
-          - aur/gnome-shell-extension-space-bar-git
+          # - aur/gnome-shell-extension-space-bar-git
         state: present
       become_user: aura
       become: true
@@ -107,8 +105,8 @@
     - name: Install themes, icons & fonts
       community.general.pacman:
         name:
-          - adwaita-qt5
-          - adwaita-qt6
+          # - adwaita-qt5
+          # - adwaita-qt6
           - gnome-themes-extra
           - papirus-icon-theme
           - qt5ct
@@ -116,11 +114,11 @@
           - extra/noto-fonts-cjk
           - extra/noto-fonts-emoji
           - extra/noto-fonts-extra
-          - community/ttf-dejavu
-          - community/ttf-fira-code
+          - extra/ttf-dejavu
+          - extra/ttf-fira-code
           - extra/adobe-source-code-pro-fonts
-          - community/adobe-source-han-sans-jp-fonts
-          - community/adobe-source-han-serif-jp-fonts
+          - extra/adobe-source-han-sans-jp-fonts
+          - extra/adobe-source-han-serif-jp-fonts
         state: present
       become: true
 
@@ -163,7 +161,7 @@
     - name: Set list of enabled extensions
       community.general.dconf:
         key: "/org/gnome/shell/enabled-extensions"
-        value: "['GPU_profile_selector@lorenzo9904.gmail.com', 'appindicatorsupport@rgcjonas.gmail.com', 'blur-my-shell@aunetx', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'tiling-assistant@leleat-on-github', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'space-bar@luchrioh']"
+        value: "['appindicatorsupport@rgcjonas.gmail.com', 'blur-my-shell@aunetx', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'tiling-assistant@leleat-on-github', 'drive-menu@gnome-shell-extensions.gcampax.github.com']"
         state: present
 
     - name: Set windwos buttons 'minimize,maximize,close'
@@ -184,10 +182,10 @@
         value: "'suspend'"
         state: present
 
-    - name: Input sources 'en,ru'
+    - name: Input sources 'en'
       community.general.dconf:
         key: "/org/gnome/desktop/input-sources/sources"
-        value: "[('xkb', 'us'), ('xkb', 'ru')]"
+        value: "[('xkb', 'us')]"
         state: present
 
     - name: Switch input sources 'CapsLock'
@@ -256,10 +254,52 @@
         value: "['size', 'none', 'none']"
         state: present
 
+    - name: Set Favorite Apps
+      community.general.dconf:
+        key: "/org/gnome/shell/favorite-apps"
+        value: "['code.desktop', 'org.mozilla.firefox.desktop', 'md.obsidian.Obsidian.desktop']"
+        state: present
+
     - name: Remove system sounds
       community.general.dconf:
         key: "/org/gnome/desktop/sound/event-sounds"
         value: "false"
+        state: present
+
+    - name: Disable Hot Corner
+      community.general.dconf:
+        key: "/org/gnome/desktop/interface/enable-hot-corners"
+        value: "false"
+        state: present
+
+    - name: Text Editor Show Line Numbers
+      community.general.dconf:
+        key: "/org/gnome/TextEditor/show-line-numbers"
+        value: "true"
+        state: present
+
+    - name: Text Editor Highlight Current Line
+      community.general.dconf:
+        key: "/org/gnome/TextEditor/highlight-current-line"
+        value: "true"
+        state: present
+
+    - name: Text Editor Show Map
+      community.general.dconf:
+        key: "/org/gnome/TextEditor/show-map"
+        value: "true"
+        state: present
+
+    - name: Text Editor Indent Style
+      community.general.dconf:
+        key: "/org/gnome/TextEditor/indent-style"
+        value: "'space'"
+        state: present
+
+    - name: Text Editor Indent Style
+      community.general.dconf:
+        key: "/org/gnome/TextEditor/tab-width"
+        value: "4"
         state: present
 
     #############################################################
