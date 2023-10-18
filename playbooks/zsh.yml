@@ -59,6 +59,13 @@
         block: |
           source  ~/.shell/antigen/antigen.zsh
 
+          # Users and emails for work and personal.
+          GIT_ACCOUNT_WORK_USER=""
+          GIT_ACCOUNT_WORK_EMAIL=""
+
+          GIT_ACCOUNT_PERSONAL_USER=""
+          GIT_ACCOUNT_PERSONAL_EMAIL=""
+
           # Uncomment the following line to enable command auto-correction.
           ENABLE_CORRECTION="true"
 
@@ -91,19 +98,19 @@
           antigen apply
 
           function set_git_account {
-            local username="$1"
-            local email="$2"
+            local username="${1}"
+            local email="${2}"
 
             # Check if username or email are empty
-            if [ -z "$username" ] || [ -z "$email" ]; then
+            if [ -z "${username}" ] || [ -z "${email}" ]; then
                 echo "Error: Both a username and email must be provided."
                 return 1
             fi
 
             if [ -d ".git" ] || git rev-parse --git-dir > /dev/null 2>&1; then
-                git config user.name "$username"
+                git config user.name "${username}"
                 git config user.email "$email"
-                echo "Set to '$username'."
+                echo "Set to '${username}'."
             else
                 echo "Not a git repository."
             fi
@@ -112,6 +119,11 @@
           alias git-work='set_git_account "${GIT_ACCOUNT_WORK_USER}" "${GIT_ACCOUNT_WORK_EMAIL}"'
           alias git-personal='set_git_account "${GIT_ACCOUNT_PERSONAL_USER}" "${GIT_ACCOUNT_PERSONAL_EMAIL}"'
 
+          if command -v "zoxide" > /dev/null 2>&1; then
+              eval "$(zoxide init zsh)"
+          else
+              echo "Command 'zoxide' is missing."
+          fi
 
     - name: Get the 'username'
       ansible.builtin.shell:
