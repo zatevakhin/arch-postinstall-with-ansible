@@ -35,7 +35,6 @@
         name:
           - aur/syncthing-gtk
           - aur/foxglove-studio-bin
-          - aur/visual-studio-code-bin
         state: present
       become_user: aura
       become: true
@@ -67,6 +66,14 @@
     - name: Install Flameshot (flatpak)
       community.general.flatpak:
         name: org.flameshot.Flameshot
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
+    - name: Install Podcasts (flatpak)
+      community.general.flatpak:
+        name: org.gnome.Podcasts
         method: system
         remote: flathub
         state: present
