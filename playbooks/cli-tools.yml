@@ -25,6 +25,51 @@
       name: mc
       state: present
 
+  - name: Install 'less'
+    community.general.pacman:
+      name: core/less
+      state: present
+
+  - name: Install 'man'
+    community.general.pacman:
+      name: core/man-db
+      state: present
+
+  - name: Install 'tldr'
+    community.general.pacman:
+      name: extra/tldr
+      state: present
+
+  - name: Install 'jq'
+    community.general.pacman:
+      name: extra/jq
+      state: present
+
+  - name: Install 'ncdu'
+    community.general.pacman:
+      name: extra/ncdu
+      state: present
+
+  - name: Install 'dust'
+    community.general.pacman:
+      name: extra/dust
+      state: present
+
+  - name: Install 'duf'
+    community.general.pacman:
+      name: extra/duf
+      state: present
+
+  - name: Install 'dog'
+    community.general.pacman:
+      name: extra/dog
+      state: present
+
+  - name: Install 'fd'
+    community.general.pacman:
+      name: extra/fd
+      state: present
+
   - name: Install 'tmux'
     community.general.pacman:
       name: tmux
@@ -76,6 +121,21 @@
   - name: Install 'eza' replacement for 'ls'
     community.general.pacman:
       name: eza
+      state: present
+
+  - name: Install 'lsd' replacement for 'ls'
+    community.general.pacman:
+      name: extra/lsd
+      state: present
+
+  - name: Install 'broot'
+    community.general.pacman:
+      name: extra/broot
+      state: present
+
+  - name: Install 'zoxide'
+    community.general.pacman:
+      name: extra/zoxide
       state: present
 
   - name: Install 'bat' replacement for 'cat'
