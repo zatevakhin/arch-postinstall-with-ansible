@@ -12,16 +12,19 @@
       community.general.pacman:
         name: docker
         state: present
+      become: true
 
     - name: Install 'docker-compose'
       community.general.pacman:
         name: docker-compose
         state: present
+      become: true
 
-    - name: Install 'community/docker-buildx'
+    - name: Install 'docker-buildx'
       community.general.pacman:
         name: extra/docker-buildx
         state: present
+      become: true
 
     - name: Install 'aur/python-rocker'
       kewlfft.aur.aur:
@@ -30,6 +33,13 @@
         state: present
       become: true
       become_user: aura
+
+    # Required for 'python-rocker'.
+    - name: Install 'extra/xorg-xauth'
+      community.general.pacman:
+        name: extra/xorg-xauth
+        state: present
+      become: true
 
     - name: Enable 'docker' service
       ansible.builtin.systemd:
