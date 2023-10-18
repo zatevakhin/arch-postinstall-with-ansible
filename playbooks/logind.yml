@@ -1,0 +1,27 @@
+---
+- name: Configure logind
+  hosts: "*"
+
+  tasks:
+    - name: Ignore HandleLidSwitch
+      ansible.builtin.replace:
+        path: /etc/systemd/logind.conf
+        regexp: '^#HandleLidSwitch=suspend'
+        replace: 'HandleLidSwitch=ignore'
+      become: true
+
+    - name: Ignore HandleLidSwitchExternalPower
+      ansible.builtin.replace:
+        path: /etc/systemd/logind.conf
+        regexp: '^#HandleLidSwitchExternalPower=suspend'
+        replace: 'HandleLidSwitchExternalPower=ignore'
+      become: true
+
+    - name: Ignore HandleLidSwitchDocked
+      ansible.builtin.replace:
+        path: /etc/systemd/logind.conf
+        regexp: '^#HandleLidSwitchDocked=suspend'
+        replace: 'HandleLidSwitchDocked=ignore'
+      become: true
+
+
