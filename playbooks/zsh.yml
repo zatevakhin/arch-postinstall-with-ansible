@@ -125,6 +125,12 @@
               echo "Command 'zoxide' is missing."
           fi
 
+          if command -v "exa" > /dev/null 2>&1; then
+              alias ls="exa --hyperlink --git --no-permissions --octal-permissions"
+          else
+              echo "Command 'exa' is missing."
+          fi
+
     - name: Get the 'username'
       ansible.builtin.shell:
         cmd: whoami
