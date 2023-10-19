@@ -23,6 +23,7 @@
           - extra/gparted
           - extra/edk2-ovmf
           - extra/qemu-desktop
+          - extra/weechat
         state: present
       become: true
 
@@ -36,6 +37,7 @@
           - aur/syncthing-gtk
           - aur/foxglove-studio-bin
           - aur/steam-devices-git # Required by Flatpak Steam
+          - aur/kirc
         state: present
       become_user: aura
       become: true
@@ -64,6 +66,14 @@
     #############################################################
     # Install flatpak apps
     #############################################################
+    - name: Install Halloy (flatpak)
+      community.general.flatpak:
+        name: org.squidowl.halloy
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
     - name: Install Seahorse (flatpak)
       community.general.flatpak:
         name: org.gnome.seahorse.Application
