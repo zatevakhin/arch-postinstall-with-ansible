@@ -35,6 +35,7 @@
         name:
           - aur/syncthing-gtk
           - aur/foxglove-studio-bin
+          - aur/steam-devices-git # Required by Flatpak Steam
         state: present
       become_user: aura
       become: true
