@@ -49,6 +49,38 @@
         masked: false
       become: true
 
+    - name: Install 'aur/nvidia-container-runtime'
+      kewlfft.aur.aur:
+        name: aur/nvidia-container-runtime
+        use: paru
+        state: present
+      become: true
+      become_user: aura
+
+    - name: Create 'daemon.json' for docker.
+      become: true
+      ansible.builtin.blockinfile:
+        path: /etc/docker/daemon.json
+        mode: '0644'
+        create: true
+        state: present
+        block: |
+          {
+            "runtimes": {
+                "nvidia": {
+                    "path": "/usr/bin/nvidia-container-runtime",
+                    "runtimeArgs": []
+                }
+            },
+            "default-ulimits": {
+              "nofile": {
+                  "Name": "nofile",
+                  "Hard": 524288,
+                  "Soft": 1024
+              }
+            }
+          }
+
     - name: Get the 'username'
       ansible.builtin.shell:
         cmd: whoami
