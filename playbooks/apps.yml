@@ -64,6 +64,14 @@
     #############################################################
     # Install flatpak apps
     #############################################################
+    - name: Install Seahorse (flatpak)
+      community.general.flatpak:
+        name: org.gnome.seahorse.Application
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
     - name: Install Flameshot (flatpak)
       community.general.flatpak:
         name: org.flameshot.Flameshot
