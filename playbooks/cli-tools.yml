@@ -174,3 +174,18 @@
     community.general.pacman:
       name: extra/wireguard-tools
       state: present
+
+  - name: Install 'rsync'
+    community.general.pacman:
+      name: extra/rsync
+      state: present
+
+  - name: Install 'nmap'
+    community.general.pacman:
+      name: extra/nmap
+      state: present
+
+  - name: Install 'pwgen'
+    community.general.pacman:
+      name: extra/pwgen
+      state: present

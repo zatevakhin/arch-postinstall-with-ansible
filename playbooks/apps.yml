@@ -24,7 +24,16 @@
           - extra/edk2-ovmf
           - extra/qemu-desktop
           - extra/weechat
+          - extra/earlyoom
         state: present
+      become: true
+
+    - name: Enable 'earlyoom' service
+      ansible.builtin.systemd:
+        name: earlyoom.service
+        enabled: true
+        state: started
+        masked: false
       become: true
 
     #############################################################
@@ -37,6 +46,7 @@
           - aur/syncthing-gtk
           - aur/foxglove-studio-bin
           - aur/steam-devices-git # Required by Flatpak Steam
+          - aur/visual-studio-code-bin
           - aur/kirc
         state: present
       become_user: aura
@@ -66,6 +76,14 @@
     #############################################################
     # Install flatpak apps
     #############################################################
+    - name: Install Komikku (flatpak)
+      community.general.flatpak:
+        name: info.febvre.Komikku
+        method: system
+        remote: flathub
+        state: present
+      become: true
+
     - name: Install Halloy (flatpak)
       community.general.flatpak:
         name: org.squidowl.halloy
